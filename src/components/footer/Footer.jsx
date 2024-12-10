@@ -1,8 +1,8 @@
 import React from 'react'
 import styles from "./footer.module.css";
-import instagram from "/public/instagram.svg";
-import linkdn from "/public/lkdn.png";
-import fb from "/public/facebook.svg";
+import instagram from "/public/2.png";
+import x from "/public/3.png";
+import fb from "/public/1.png";
 
 import Image from 'next/image';
 import Link from 'next/link';
@@ -10,8 +10,8 @@ import Link from 'next/link';
 
 export const Socials = [
     {
-      name: "Linkdin",
-      src: linkdn,
+      name: "twitter",
+      src: x,
      
     },
     {

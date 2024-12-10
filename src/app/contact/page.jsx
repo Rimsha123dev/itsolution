@@ -4,7 +4,7 @@ import Image from "next/image";
 import Button from "@/components/Button/Button";
 
 export const metadata = {
-  title: "Lama Dev Contact Information",
+  title: "ITSolution Contact Information",
   description: "This is Contact Page",
 };
 
@@ -16,7 +16,7 @@ const Contact = () => {
         <div className={styles.imgContainer}>
           <Image
             src="/contact.png"
-            alt=""
+            alt="contact"
             fill={true}
             className={styles.image}
           />
