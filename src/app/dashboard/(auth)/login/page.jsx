@@ -1,28 +1,33 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import styles from "./page.module.css";
-import { getProviders, signIn, useSession } from "next-auth/react";
-import { useRouter, useSearchParams } from "next/navigation";
+import { signIn, useSession } from "next-auth/react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 
-const Login = ({ url }) => {
+const Login = () => {
   const session = useSession();
   const router = useRouter();
-  const params = useSearchParams();
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
 
   useEffect(() => {
-    setError(params.get("error"));
-    setSuccess(params.get("success"));
-  }, [params]);
+    // Redirect after authentication
+    if (session.status === "authenticated") {
+      router.push("/dashboard");
+    }
+  }, [session.status, router]);
+
+  useEffect(() => {
+    // Extract query parameters
+    const searchParams = new URLSearchParams(window.location.search);
+    setError(searchParams.get("error"));
+    setSuccess(searchParams.get("success"));
+  }, []);
 
   if (session.status === "loading") {
     return <p>Loading...</p>;
-  }
-
-  if (session.status === "authenticated") {
-    router?.push("/dashboard");
   }
 
   const handleSubmit = (e) => {
@@ -30,10 +35,7 @@ const Login = ({ url }) => {
     const email = e.target[0].value;
     const password = e.target[1].value;
 
-    signIn("credentials", {
-      email,
-      password,
-    });
+    signIn("credentials", { email, password });
   };
 
   return (
@@ -55,13 +57,11 @@ const Login = ({ url }) => {
           className={styles.input}
         />
         <button className={styles.button}>Login</button>
-        {error && error}
+        {error && <p className={styles.error}>{error}</p>}
       </form>
       <button
-        onClick={() => {
-          signIn("google");
-        }}
-        className={styles.button + " " + styles.google}
+        onClick={() => signIn("google")}
+        className={`${styles.button} ${styles.google}`}
       >
         Login with Google
       </button>
@@ -69,14 +69,6 @@ const Login = ({ url }) => {
       <Link className={styles.link} href="/dashboard/register">
         Create new account
       </Link>
-      {/* <button
-        onClick={() => {
-          signIn("github");
-        }}
-        className={styles.button + " " + styles.github}
-      >
-        Login with Github
-      </button> */}
     </div>
   );
 };
